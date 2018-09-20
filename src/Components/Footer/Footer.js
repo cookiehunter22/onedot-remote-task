@@ -5,11 +5,11 @@ const Footer = () => (
     <div className="text">
             Made by
       {' '}
-      <a href="">Gleb Irovich</a>
+      <a href="https://gleb-irovich.com/">Gleb Irovich</a>
       {' '}
-exlusively for
+      exclusively for
       {' '}
-      <a href="">Onedot AG</a>
+      <a href="https://www.onedot.com/">Onedot AG</a>
     </div>
 
   </div>

@@ -5,13 +5,15 @@ import Navbar from '../Navbar/Navbar';
 import DictionaryList from '../DictionaryList/DictionaryList';
 import Editor from '../Editor/Editor';
 import Footer from '../Footer/Footer';
+import Modal from '../Modal/Modal';
 import Validator from '../../Validator/Validator';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: true,
+      modal: false,
+      editing: false,
       editingExisting: false,
       library: [],
       title: 'Noname',
@@ -36,9 +38,23 @@ class App extends Component {
 
   handleBoardChange = () => {
     const { editing } = this.state;
+    const newState = {};
+    if (editing) {
+      newState.modal = true;
+    } else {
+      newState.editing = !editing;
+    }
+
+    this.setState(newState);
+  }
+
+  handleModalContinue = () => {
+    const { editing } = this.state;
     const newState = {
+      modal: false,
       editing: !editing,
     };
+
     if (editing) {
       newState.input = [
         {
@@ -120,9 +136,9 @@ class App extends Component {
     } else {
       const newDict = {
         title,
-        date: String((new Date()).toLocaleDateString('en-GB', {
+        date: (new Date()).toLocaleDateString('en-GB', {
           minute: 'numeric', hour: 'numeric', month: 'numeric', year: 'numeric', day: 'numeric',
-        })),
+        }),
         content: validatedDict.newDict,
       };
       // save
@@ -142,7 +158,6 @@ class App extends Component {
       library,
       editing: false,
       editingExisting: false,
-      activeDictionary: [],
       title: 'Noname',
       input: [
         {
@@ -188,12 +203,23 @@ class App extends Component {
     });
   }
 
+  hideModal = () => {
+    this.setState({
+      modal: false,
+    });
+  }
+
   render() {
     const {
-      editing, library, title, input,
+      editing, library, title, input, modal,
     } = this.state;
     return (
       <div className="App">
+        <Modal
+          modal={modal}
+          hideModal={this.hideModal}
+          handleModalContinue={this.handleModalContinue}
+        />
         <Title />
         <Navbar handleBoardChange={this.handleBoardChange} editing={editing} />
         <DictionaryList
@@ -201,6 +227,7 @@ class App extends Component {
           library={library}
           handleDelete={this.handleDictionaryDelete}
           handleEdit={this.handleEdit}
+          handleBoardChange ={this.handleBoardChange}
         />
         <Editor
           className={!editing ? 'hide' : ''}

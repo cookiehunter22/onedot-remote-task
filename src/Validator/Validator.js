@@ -91,7 +91,6 @@ const Validator = {
         pair.chained = false;
       }
     });
-    console.log(pairs);
 
     return {
       errors,

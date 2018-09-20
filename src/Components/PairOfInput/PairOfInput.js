@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 
 export default class PairOfInput extends React.Component {
@@ -15,6 +16,16 @@ export default class PairOfInput extends React.Component {
     handlePairDelete(index);
   }
 
+  highlightClass = (dublicated, cycled, chained) => {
+    if (cycled) {
+      return 'danger';
+    }
+    if (chained || dublicated) {
+      return 'warning';
+    }
+    return '';
+  }
+
   render() {
     const {
       pair: {
@@ -23,7 +34,7 @@ export default class PairOfInput extends React.Component {
     } = this.props;
 
     return (
-      <div className="pair">
+      <div className={`pair ${this.highlightClass(dublicated, cycled, chained)}`}>
         <div className="input-container">
           <input type="text" className="domain" value={domain} onChange={this.handleChange} />
         </div>
@@ -32,11 +43,33 @@ export default class PairOfInput extends React.Component {
           <input type="text" className="range" value={range} onChange={this.handleChange} />
         </div>
 
+        <ReactTooltip id="dublicated" type="warning">
+          <span>Dublicate Domain or Range</span>
+        </ReactTooltip>
 
+        <ReactTooltip id="chained" type="warning">
+          <span>Chained Domain</span>
+        </ReactTooltip>
+
+        <ReactTooltip id="cycled" type="error">
+          <span>Cycle</span>
+        </ReactTooltip>
         <i className="fas fa-trash-alt delete" onClick={this.handleDelete} />
-        <i className={`fas fa-exclamation-triangle ${dublicated ? 'dublicated' : ''}`} />
-        <i className={`fas fa-exclamation-triangle ${chained ? 'chained' : ''}`} />
-        <i className={`fas fa-exclamation-triangle ${cycled ? 'cycled' : ''}`} />
+        <i
+          className={`fas fa-exclamation-triangle ${dublicated ? 'dublicated' : ''}`}
+          data-tip
+          data-for="dublicated"
+        />
+        <i
+          className={`fas fa-exclamation-triangle ${chained ? 'chained' : ''}`}
+          data-tip
+          data-for="chained"
+        />
+        <i
+          className={`fas fa-exclamation-triangle ${cycled ? 'cycled' : ''}`}
+          data-tip
+          data-for="cycled"
+        />
       </div>
     );
   }
@@ -51,4 +84,13 @@ PairOfInput.propTypes = {
     cycled: PropTypes.bool,
     chained: PropTypes.bool,
   }).isRequired,
+  dublicated: PropTypes.bool,
+  chained: PropTypes.bool,
+  cycled: PropTypes.bool,
+};
+
+PairOfInput.defaultProps = {
+  dublicated: false,
+  chained: false,
+  cycled: false,
 };

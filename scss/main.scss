@@ -2,6 +2,10 @@
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 @import 'mixins';
 
+body {
+    color: $dark-blue;
+}
+
 #title {
     z-index: 1;
     min-width: $width;
@@ -65,6 +69,17 @@
     &.hide {
         display: none;
     }
+    .empty-list {
+        margin: 0 auto;
+        text-align: center;
+        padding: 50px;
+        color: grey;
+        span {
+            cursor: pointer;
+            font-weight: bold;
+            color: $dark-blue;
+        }
+    }
     ul {
         margin-top: 0;
         list-style-type: none;
@@ -126,6 +141,7 @@
 
 #editor {
     min-width: $width;
+    margin-top: 30px;
     &.hide {
         display: none;
     }
@@ -141,21 +157,30 @@
             border-bottom: solid 2px $main-blue;
             background-color: transparentize($main-blue, 0.6);
 
+            &.danger {
+                border-top: solid 2px $carrot-red;
+                border-bottom: solid 2px $carrot-red;
+                background-color: transparentize($carrot-red, 0.6);
+            }
+
+            &.warning {
+                border-top: solid 2px $warning;
+                border-bottom: solid 2px $warning;
+                background-color: transparentize($warning, 0.6);
+            }
+
         }
 
         .input-container {
             width: 30%;
             min-width: 150px;
             display: inline-block;
-            input {
-            
-            }
-
         }
         
         .fas {
             color: grey;
             display: none;
+            margin-right: 30px;
             &.delete{
                 display: inline;
                 cursor: pointer;
@@ -164,31 +189,101 @@
                 }
             }
             &.dublicated, &.chained {
-                color: yellow;
+                color: #FFCB49;
                 display: inline;
             }
             &.cycled{
-                color:red;
+                color:$carrot-red;
                 display: inline;
             }
         }
     }
+    
     .save-container {
         margin-top: 40px;
+        
+        padding: 10px 0 10px 40px;
+
+        .input-title {
+            display: inline-block;
+        }
         .save {
-            margin-top: 30px;
-            padding: 10px 20px;
-            border:solid 1px green;
-            border-radius: 20px;
-            width: 50px;
+            display: inline-block;
+            margin-left: 30px;
+            padding: 8px 20px;
+            border: solid 3px $main-blue;
+            width: 101px;
             text-align: center;
+            font-weight: bold;
+            color: $main-blue - 50;
             cursor: pointer;
+
+            &:hover {
+                background-color: $main-blue;
+                color: $body-bg;
+            }
         }
         
     }
 }
+#modal {
+    min-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    top: 30%;
+    z-index: 11;
+    &.hide {
+        display: none;
+    }
+    .modal-container {
+        width: 300px;
+        margin: 0 auto;
+        padding: 0px 10px 20px 10px;
+        border: solid 2px $carrot-red;
+        background-color: $body-bg;
+        
+        h3 {
+            margin-top: 30px;
+            color: $carrot-red - 40;
+        }
+        h5 {
+            margin-top: 30px;
+            color: $carrot-red - 10;
+        }
+        .ok {
+            display: inline-block;
+            margin-top: 30px;
+            color: $carrot-red;
+            border: solid 2px $carrot-red;
+            width: 100px;
+            margin-left: 5px;
+            margin-right: auto;
+            cursor: pointer;
+            &:hover {
+                background-color: $carrot-red;
+                color: $body-bg;
+            }
+        }
+        .cancel {
+            display: inline-block;
+            margin-top: 30px;
+            color: grey;
+            border: solid 2px grey;
+            width: 100px;
+            margin-left: auto;
+            margin-right: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: grey;
+                color: $body-bg;
+            }
+        }
+    }
+}
 
 #footer {
+    min-width: $width;
     width: 100%;
     text-align: right;
     margin-top: 50px;

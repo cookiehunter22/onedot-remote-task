@@ -11,10 +11,13 @@ const Editor = ({
           input.map((item, index) => <PairOfInput pair={item} key={index} index={index} {...props} />)
       }
     <div className="save-container">
-          My dictionary name:
+          Dictionary name:
       {' '}
-      <input type="text" value={title} onChange={handleTitleChange} />
-      <div className="save" type="button" onClick={handleSaveClick}>Save</div>
+      <div className="input-title">
+        <input type="text" value={title} onChange={handleTitleChange} />
+      </div>
+
+      <div className="save" onClick={handleSaveClick}>Save</div>
     </div>
 
   </div>
