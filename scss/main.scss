@@ -1,0 +1,210 @@
+@import 'variables';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+@import 'mixins';
+
+#title {
+    z-index: 1;
+    min-width: $width;
+    height: 600px;
+    background: url(./onedot-background.jpg) no-repeat center center;
+	background-size: cover;
+    position: relative;
+    text-align: center;
+    padding: 250px 0 0 0;
+    color: $dark-blue;
+    h1 {
+        font-weight: 700;
+        font-size: 3rem;
+    }
+}
+
+#navbar {
+    z-index: 10;
+    position: relative;
+    box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.1);
+    min-width: $width;
+    background-color: #F4F4F4;
+    color: $main-blue;
+    font-weight: 700;
+    ul {
+        margin: 0;
+        padding: 20px 0 20px 40px;
+        list-style-type: none;
+        &.hide {
+            display: none;
+        }
+        li {
+            display: inline-block;
+            width: 30%;
+            min-width: 150px;
+
+            &.new-dict {
+                padding-right: 40px; 
+                float: right;
+                
+                
+                text-align: right;
+                div {
+                    cursor: pointer;
+                    width: 50px;
+                    float: right;
+                    &:hover {
+                        color: $dark-blue;
+                    }
+                }
+            }
+        }
+            
+        
+    }
+}
+
+#dictionary-list {
+    min-width: $width;
+    color: $dark-blue;
+    &.hide {
+        display: none;
+    }
+    ul {
+        margin-top: 0;
+        list-style-type: none;
+        padding: 0;
+        li {
+
+            
+            margin-top: 20px;
+            padding: 15px 0 15px 40px;
+            border-top: solid 2px transparent;
+            border-bottom: solid 2px transparent;
+
+            &:hover {
+                border-top: solid 2px $main-blue;
+                border-bottom: solid 2px $main-blue;
+                background-color: transparentize($main-blue, 0.6);
+
+            }
+
+            .item {
+                div {
+                    display: inline-block;
+                    &.name, &.date {
+                        width: 30%;
+                        min-width: 150px;
+                    }
+
+                    &.edit {
+                        padding: 5px 10px 5px 10px;
+                        color: $main-blue;
+                        border: solid 2px $main-blue;
+                        cursor: pointer;
+                        margin-right: 30px;
+
+                        &:hover {
+                            background-color: $main-blue;
+                            color: $body-bg;
+                        }
+                    }
+                    &.delete {
+                        color:grey;
+                        font-size: 80%;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: $carrot-red;
+                        }
+
+                        .fas {
+                            margin-right: 7px;
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+#editor {
+    min-width: $width;
+    &.hide {
+        display: none;
+    }
+
+    .pair {
+        margin-top: 10px;
+        padding: 10px 0 10px 40px;
+        border-top: solid 2px transparent;
+        border-bottom: solid 2px transparent;
+
+        &:hover {
+            border-top: solid 2px $main-blue;
+            border-bottom: solid 2px $main-blue;
+            background-color: transparentize($main-blue, 0.6);
+
+        }
+
+        .input-container {
+            width: 30%;
+            min-width: 150px;
+            display: inline-block;
+            input {
+            
+            }
+
+        }
+        
+        .fas {
+            color: grey;
+            display: none;
+            &.delete{
+                display: inline;
+                cursor: pointer;
+                &:hover {
+                    color: $carrot-red;
+                }
+            }
+            &.dublicated, &.chained {
+                color: yellow;
+                display: inline;
+            }
+            &.cycled{
+                color:red;
+                display: inline;
+            }
+        }
+    }
+    .save-container {
+        margin-top: 40px;
+        .save {
+            margin-top: 30px;
+            padding: 10px 20px;
+            border:solid 1px green;
+            border-radius: 20px;
+            width: 50px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+    }
+}
+
+#footer {
+    width: 100%;
+    text-align: right;
+    margin-top: 50px;
+    position: relative;
+    box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.7);
+    padding: 30px 30px;
+    z-index: 10;
+    background-color: $main-blue;
+    color: $main-blue - 90;
+    .text{
+        a {
+            text-decoration: none;
+            color: $dark-blue - 10;
+            &:hover {
+                color: $body-bg;
+            }
+        }
+    }
+}
