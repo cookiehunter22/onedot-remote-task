@@ -87,6 +87,9 @@ PairOfInput.propTypes = {
   dublicated: PropTypes.bool,
   chained: PropTypes.bool,
   cycled: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+  handlePairDelete: PropTypes.func.isRequired,
+  handlePairUpdate: PropTypes.func.isRequired,
 };
 
 PairOfInput.defaultProps = {

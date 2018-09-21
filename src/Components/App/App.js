@@ -31,8 +31,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const array = JSON.parse(window.localStorage.getItem('library')) || [];
+
+    if (array.length) {
+      array.sort((a, b) => a.date < b.date);
+    }
     this.setState({
-      library: JSON.parse(window.localStorage.getItem('library')) || [],
+      library: array,
     });
   }
 
@@ -78,7 +83,7 @@ class App extends Component {
 
     // delete cells if they were emptied
     const { domain, range } = input[index];
-    if (!domain && !range) {
+    if (!domain && !range && input.length > 2) {
       input.splice(index, 1);
     }
     // add empty if the last was used
@@ -136,9 +141,7 @@ class App extends Component {
     } else {
       const newDict = {
         title,
-        date: (new Date()).toLocaleDateString('en-GB', {
-          minute: 'numeric', hour: 'numeric', month: 'numeric', year: 'numeric', day: 'numeric',
-        }),
+        date: (new Date()).getTime(),
         content: validatedDict.newDict,
       };
       // save
@@ -153,6 +156,8 @@ class App extends Component {
     } else {
       library.push(newDict);
     }
+
+    library.sort((a, b) => a.date < b.date);
 
     this.setState({
       library,
@@ -214,31 +219,34 @@ class App extends Component {
       editing, library, title, input, modal,
     } = this.state;
     return (
-      <div className="App">
-        <Modal
-          modal={modal}
-          hideModal={this.hideModal}
-          handleModalContinue={this.handleModalContinue}
-        />
-        <Title />
-        <Navbar handleBoardChange={this.handleBoardChange} editing={editing} />
-        <DictionaryList
-          className={editing ? 'hide' : ''}
-          library={library}
-          handleDelete={this.handleDictionaryDelete}
-          handleEdit={this.handleEdit}
-          handleBoardChange ={this.handleBoardChange}
-        />
-        <Editor
-          className={!editing ? 'hide' : ''}
-          handleSaveClick={this.handleSaveClick}
-          activeDictionary={{ title, input }}
-          handlePairUpdate={this.handlePairUpdate}
-          handlePairDelete={this.handlePairDelete}
-          handleTitleChange={this.handleTitleChange}
-        />
+      <React.Fragment>
+        <div className="App">
+          <Modal
+            modal={modal}
+            hideModal={this.hideModal}
+            handleModalContinue={this.handleModalContinue}
+          />
+          <Title />
+          <Navbar handleBoardChange={this.handleBoardChange} editing={editing} />
+          <DictionaryList
+            className={editing ? 'hide' : ''}
+            library={library}
+            handleDelete={this.handleDictionaryDelete}
+            handleEdit={this.handleEdit}
+            handleBoardChange={this.handleBoardChange}
+          />
+          <Editor
+            className={!editing ? 'hide' : ''}
+            handleSaveClick={this.handleSaveClick}
+            activeDictionary={{ title, input }}
+            handlePairUpdate={this.handlePairUpdate}
+            handlePairDelete={this.handlePairDelete}
+            handleTitleChange={this.handleTitleChange}
+          />
+
+        </div>
         <Footer />
-      </div>
+      </React.Fragment>
     );
   }
 }
