@@ -25,7 +25,7 @@ class DictionaryItem extends React.Component {
         <div className="item">
           <div className="name">{title}</div>
           <div className="date">{formatedDate}</div>
-          <div className="edit sweep-to-right" onClick={this.handleEditClick}>edit</div>
+          <div className="edit" onClick={this.handleEditClick}>edit</div>
           <div className="delete" onClick={this.handleDeleteClick}>
             <i className="fas fa-trash-alt" />
             delete

@@ -120,33 +120,71 @@ class App extends Component {
     });
   }
 
-  handleSaveClick = () => {
-    const { input, title } = this.state;
-
-
+  handleValidateClick = () => {
+    const { input } = this.state;
     // validate
     const validatedDict = Validator.validateAll(input);
+    validatedDict.pairs.push({
+      domain: '',
+      range: '',
+    });
+    this.setState({
+      input: validatedDict.pairs,
+    });
+  }
 
+  handleSaveClick = () => {
+    const { input, title } = this.state;
+    // Uncomment if validation on save is needed
 
+    // validate
+    // const validatedDict = Validator.validateAll(input);
     // validation has not passed
-    if (validatedDict.errors) {
-      validatedDict.pairs.push({
-        domain: '',
-        range: '',
-      });
-      this.setState({
-        input: validatedDict.pairs,
-      });
+    // if (validatedDict.errors) {
+    //   validatedDict.pairs.push({
+    //     domain: '',
+    //     range: '',
+    //   });
+    //   this.setState({
+    //     input: validatedDict.pairs,
+    //   });
     // succesfully validated
-    } else {
-      const newDict = {
-        title,
-        date: (new Date()).getTime(),
-        content: validatedDict.newDict,
-      };
-      // save
-      this.handleSave(newDict);
-    }
+    // } else {
+    //   const newDict = {
+    //     title,
+    //     date: (new Date()).getTime(),
+    //     content: validatedDict.newDict,
+    //   };
+
+    // const newDict = {
+    //   title,
+    //   date: (new Date()).getTime(),
+    //   content: validatedDict.newDict,
+    // };
+
+    const domains = [];
+    const ranges = [];
+
+    // splice last empty
+    if (input[input.length - 1].domain === '' && input[input.length - 1].range === '') input.splice(input.length - 1, 1);
+
+    input.forEach((pair) => {
+      domains.push(pair.domain);
+      ranges.push(pair.range);
+    });
+
+    const newDict = {
+      content: {
+        domains,
+        ranges,
+      },
+      title,
+      date: (new Date()).getTime(),
+    };
+
+
+    // save
+    this.handleSave(newDict);
   }
 
   handleSave = (newDict) => {
@@ -191,11 +229,9 @@ class App extends Component {
 
   handleEdit = (index) => {
     const { library } = this.state;
-    const { content, title } = library[index];
-    const pairs = Object.keys(content).map(key => ({
-      domain: key,
-      range: content[key],
-    }));
+    const { title, content: { domains, ranges } } = library[index];
+    const pairs = domains.map((domain, i) => ({ domain, range: ranges[i] }));
+
     pairs.push({
       domain: '',
       range: '',
@@ -242,6 +278,7 @@ class App extends Component {
             handlePairUpdate={this.handlePairUpdate}
             handlePairDelete={this.handlePairDelete}
             handleTitleChange={this.handleTitleChange}
+            handleValidateClick={this.handleValidateClick}
           />
 
         </div>

@@ -228,8 +228,12 @@ html {
                 color: #FFCB49;
                 display: inline;
             }
-            &.cycled{
+            &.cycled {
                 color:$carrot-red;
+                display: inline;
+            }
+            &.passed {
+                color: $main-blue;
                 display: inline;
             }
         }
@@ -243,7 +247,7 @@ html {
         .input-title {
             display: inline-block;
         }
-        .save {
+        .save, .validate {
             display: inline-block;
             margin-left: 30px;
             padding: 8px 20px;
@@ -257,6 +261,16 @@ html {
             &:hover {
                 background-color: $main-blue;
                 color: $body-bg;
+            }
+        }
+
+        .validate {
+            border-color: $carrot-red;
+            width: 110px;
+            color: $carrot-red - 50;
+
+            &:hover {
+                background-color: $carrot-red;
             }
         }
         

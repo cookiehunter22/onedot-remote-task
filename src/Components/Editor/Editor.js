@@ -4,7 +4,7 @@ import PairOfInput from '../PairOfInput/PairOfInput';
 
 
 const Editor = ({
-  className, handleTitleChange, handleSaveClick, activeDictionary: { input, title }, ...props
+  className, handleTitleChange, handleValidateClick, handleSaveClick, activeDictionary: { input, title }, ...props
 }) => (
   <div id="editor" className={className}>
     {
@@ -18,6 +18,7 @@ const Editor = ({
       </div>
 
       <div className="save" onClick={handleSaveClick}>Save</div>
+      <div className="validate" onClick={handleValidateClick}>Validate</div>
     </div>
 
   </div>
@@ -30,6 +31,7 @@ Editor.propTypes = {
   handlePairDelete: PropTypes.func.isRequired,
   handlePairUpdate: PropTypes.func.isRequired,
   handleTitleChange: PropTypes.func.isRequired,
+  handleValidateClick: PropTypes.func.isRequired,
   activeDictionary: PropTypes.shape({
     input: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,

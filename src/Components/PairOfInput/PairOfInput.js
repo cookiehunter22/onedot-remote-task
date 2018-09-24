@@ -16,25 +16,29 @@ export default class PairOfInput extends React.Component {
     handlePairDelete(index);
   }
 
-  highlightClass = (dublicated, cycled, chained) => {
+  highlightClass = (dublicated, cycled, chained, checked) => {
     if (cycled) {
       return 'danger';
     }
     if (chained || dublicated) {
       return 'warning';
     }
+    if (!cycled && !chained && !dublicated && checked) {
+      return 'passed';
+    }
     return '';
   }
+
 
   render() {
     const {
       pair: {
-        domain, range, dublicated, chained, cycled,
+        domain, range, dublicated, chained, cycled, checked,
       },
     } = this.props;
 
     return (
-      <div className={`pair ${this.highlightClass(dublicated, cycled, chained)}`}>
+      <div className={`pair ${this.highlightClass(dublicated, cycled, chained, checked)}`}>
         <div className="input-container">
           <input type="text" className="domain" value={domain} onChange={this.handleChange} />
         </div>
@@ -70,6 +74,10 @@ export default class PairOfInput extends React.Component {
           data-tip
           data-for="cycled"
         />
+        <i
+          className={`fas fa-check ${this.highlightClass(dublicated, cycled, chained, checked)}`}
+        />
+
       </div>
     );
   }

@@ -90,6 +90,7 @@ const Validator = {
       } else {
         pair.chained = false;
       }
+      pair.checked = true;
     });
 
     return {
