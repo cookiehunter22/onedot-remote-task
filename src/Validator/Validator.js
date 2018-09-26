@@ -1,50 +1,142 @@
 
 const Validator = {
 
-  // Check for Forks and Dublicates
-  validateDublicates(array) {
-    return array.filter(this.valueIsNotUnique);
+  // Check for Dublicates and Forks
+  validateDublicatesAndForks(domains, ranges) {
+    const dublicateDomains = [];
+    const forkDomains = [];
+
+    for (let index = 0; index < domains.length; index++) {
+      const value = domains[index];
+      const indexOfFirstOccurence = domains.indexOf(value);
+      if (indexOfFirstOccurence !== index) {
+        let itterator = indexOfFirstOccurence;
+
+        while (itterator >= 0 && itterator < index) {
+          // if they have similar value => Dublicates
+
+          if (ranges[itterator] === ranges[index]) {
+            dublicateDomains.push(itterator);
+            dublicateDomains.push(index);
+          } else {
+          // if they are not similar => fork
+            forkDomains.push(itterator);
+            forkDomains.push(index);
+          }
+          const nextMatch = domains.indexOf(value, itterator);
+          itterator = nextMatch < itterator ? nextMatch : -1;
+          // console.log(itterator);
+        }
+      }
+    }
+    return {
+      dublicateDomains,
+      forkDomains,
+    };
   },
 
-  valueIsNotUnique(value, index, array) {
-    return array.indexOf(value) !== index;
+  // Check for Cycles and Chains
+  validateCyclesAndChains(domains, ranges) {
+    const chainDomains = [];
+    const cycleDomains = [];
+
+    for (let index = 0; index < domains.length; index++) {
+      const value = domains[index];
+      const appearsInRanges = ranges.indexOf(value);
+      if (appearsInRanges >= 0) {
+        let itterator = appearsInRanges;
+        // if it appears in ranges -> it must be chained
+        chainDomains.push(itterator);
+        chainDomains.push(index);
+
+        while (itterator >= 0) {
+          // if they have match => Cycle
+
+          if (domains[itterator] === ranges[index]) {
+            cycleDomains.push(itterator);
+            cycleDomains.push(index);
+          }
+          // } else {
+          //   // if they are not similar => Chain
+          //   chainDomains.push(itterator);
+          //   chainDomains.push(index);
+          // }
+          // find next uccurence
+          const nextMatch = ranges.indexOf(value, itterator);
+          itterator = nextMatch < itterator ? nextMatch : -1;
+        }
+      }
+    }
+
+    return {
+      cycleDomains,
+      chainDomains,
+    };
   },
+
+
+  // domains.filter((value, index) => {
+  //   const position = domains.indexOf(value);
+  //   if (position !== index) {
+  //     if (!dublicateDomainsIndexes.includes(position)) {
+  //       dublicateDomainsIndexes.push(position);
+  //     }
+  //     dublicateDomainsIndexes.push(index);
+  //   }
+  //   return true;
+  // });
+  // return domains.filter(this.valueIsDublicate.bind(null, ranges));
+  // },
+
+  // valueIsDublicate(ranges, dublicateIndexes, value, index, domains) {
+  //   if(dublicateIndexes.includes(index)){
+
+  //   }
+  //   return domains.indexOf(value) !== index && ranges[domains.indexOf(value)] === ranges[index];
+  // },
+
+  // Check for Forks
+  // validateForks(domains, ranges) {
+  //   return domains.filter(this.valueIsForked.bind(null, ranges));
+  // },
+
+  // valueIsForked(ranges, value, index, domains) {
+  //   return domains.indexOf(value) !== index && ranges[domains.indexOf(value)] !== ranges[index];
+  // },
 
   // Check for cycles
-  validateCycle(domains, ranges) {
-    const emptyArray = [];
-    domains.filter((value, index) => this.valueIsCycled(value, index, domains, ranges, emptyArray));
+  // validateCycle(domains, ranges) {
+  //   const emptyArray = [];
+  //   domains.filter(this.valueIsCycled.bind(null, ranges, emptyArray));
+  //   return emptyArray;
+  // },
 
 
-    return emptyArray;
-  },
+  // valueIsCycled(ranges, emptyArray, value, index, domains) {
+  //   const position = ranges.indexOf(value);
+  //   if (position !== -1 && domains[position] === ranges[index] && position !== index) {
+  //     emptyArray.push(index);
+  //     return true;
+  //   }
+  //   return false;
+  // },
 
+  // // check for chains
+  // validateChain(domains, ranges) {
+  //   const emptyArray = [];
+  //   domains.filter(this.valueIsChained.bind(null, ranges, emptyArray));
 
-  valueIsCycled(value, index, domains, ranges, emptyArray) {
-    const position = ranges.indexOf(value);
-    if (position !== -1 && domains[position] === ranges[index] && position !== index) {
-      emptyArray.push(index);
-      return true;
-    }
-    return false;
-  },
-
-  // check for chains
-  validateChain(domains, ranges) {
-    const emptyArray = [];
-    domains.filter((value, index) => this.valueIsChained(value, index, domains, ranges, emptyArray));
-
-    return emptyArray;
-  },
-  valueIsChained(value, index, domains, ranges, emptyArray) {
-    // return dict[dict[value]] !== value && Object.values(dict).includes(value);
-    const position = ranges.indexOf(value);
-    if (position !== -1 && domains[position] !== ranges[index]) {
-      emptyArray.push(index);
-      return true;
-    }
-    return false;
-  },
+  //   return emptyArray;
+  // },
+  // valueIsChained(ranges, emptyArray, value, index, domains) {
+  //   // return dict[dict[value]] !== value && Object.values(dict).includes(value);
+  //   const position = ranges.indexOf(value);
+  //   if (position !== -1 && domains[position] !== ranges[index]) {
+  //     emptyArray.push(index);
+  //     return true;
+  //   }
+  //   return false;
+  // },
 
   validateAll(pairs) {
     const domains = [];
@@ -60,31 +152,35 @@ const Validator = {
       ranges.push(pair.range);
       newDict[pair.domain] = pair.range;
     });
-    const dublicateDomains = this.validateDublicates(domains);
-    const dublicateRanges = this.validateDublicates(ranges);
-    const cycledDomains = this.validateCycle(domains, ranges);
-    const chainedDomains = this.validateChain(domains, ranges);
+    const { dublicateDomains, forkDomains } = this.validateDublicatesAndForks(domains, ranges);
+    const { cycleDomains, chainDomains } = this.validateCyclesAndChains(domains, ranges);
 
 
     // add errors and warnings
     pairs.forEach((pair, index) => {
       // dublicate
-      const { domain, range } = pair;
-      if (dublicateDomains.includes(domain) || dublicateRanges.includes(range)) {
+      if (dublicateDomains.includes(index)) {
         pair.dublicated = true;
         errors = true;
       } else {
         pair.dublicated = false;
       }
+      // fork
+      if (forkDomains.includes(index)) {
+        pair.forked = true;
+        errors = true;
+      } else {
+        pair.forked = false;
+      }
       // cycle
-      if (cycledDomains.includes(index)) {
+      if (cycleDomains.includes(index)) {
         pair.cycled = true;
         errors = true;
       } else {
         pair.cycled = false;
       }
       // chain
-      if (chainedDomains.includes(index)) {
+      if (chainDomains.includes(index)) {
         pair.chained = true;
         errors = true;
       } else {

@@ -16,14 +16,14 @@ export default class PairOfInput extends React.Component {
     handlePairDelete(index);
   }
 
-  highlightClass = (dublicated, cycled, chained, checked) => {
+  highlightClass = (dublicated, forked, cycled, chained, checked) => {
     if (cycled) {
       return 'danger';
     }
-    if (chained || dublicated) {
+    if (chained || dublicated || forked) {
       return 'warning';
     }
-    if (!cycled && !chained && !dublicated && checked) {
+    if (!cycled && !chained && !dublicated && !forked && checked) {
       return 'passed';
     }
     return '';
@@ -33,12 +33,12 @@ export default class PairOfInput extends React.Component {
   render() {
     const {
       pair: {
-        domain, range, dublicated, chained, cycled, checked,
+        domain, range, dublicated, chained, cycled, forked, checked,
       },
     } = this.props;
 
     return (
-      <div className={`pair ${this.highlightClass(dublicated, cycled, chained, checked)}`}>
+      <div className={`pair ${this.highlightClass(dublicated, forked, cycled, chained, checked)}`}>
         <div className="input-container">
           <input type="text" className="domain" value={domain} onChange={this.handleChange} />
         </div>
@@ -48,7 +48,10 @@ export default class PairOfInput extends React.Component {
         </div>
 
         <ReactTooltip id="dublicated" type="warning">
-          <span>Dublicate Domain or Range</span>
+          <span>Dublicate Domain</span>
+        </ReactTooltip>
+        <ReactTooltip id="forked" type="warning">
+          <span>Forks</span>
         </ReactTooltip>
 
         <ReactTooltip id="chained" type="warning">
@@ -65,6 +68,11 @@ export default class PairOfInput extends React.Component {
           data-for="dublicated"
         />
         <i
+          className={`fas fa-exclamation-triangle ${forked ? 'forked' : ''}`}
+          data-tip
+          data-for="forked"
+        />
+        <i
           className={`fas fa-exclamation-triangle ${chained ? 'chained' : ''}`}
           data-tip
           data-for="chained"
@@ -75,7 +83,7 @@ export default class PairOfInput extends React.Component {
           data-for="cycled"
         />
         <i
-          className={`fas fa-check ${this.highlightClass(dublicated, cycled, chained, checked)}`}
+          className={`fas fa-check ${this.highlightClass(dublicated, forked, cycled, chained, checked)}`}
         />
 
       </div>
@@ -95,6 +103,7 @@ PairOfInput.propTypes = {
   dublicated: PropTypes.bool,
   chained: PropTypes.bool,
   cycled: PropTypes.bool,
+  forked: PropTypes.bool,
   index: PropTypes.number.isRequired,
   handlePairDelete: PropTypes.func.isRequired,
   handlePairUpdate: PropTypes.func.isRequired,
@@ -102,6 +111,7 @@ PairOfInput.propTypes = {
 
 PairOfInput.defaultProps = {
   dublicated: false,
+  forked: false,
   chained: false,
   cycled: false,
 };
